@@ -72,19 +72,12 @@ dictionary which represents the semantic descriptor of w (note: the variable nam
 			for word in words:
 				if word not in output:
 					output[word] = {}
-					for other_word in words:
-						if other_word != word:
-							if other_word in output[word]:
-								output[word][other_word] += 1
-							else:
-								output[word][other_word] = 1
-				else:
-					for other_word in words:
-						if other_word != word:
-							if other_word in output[word]:
-								output[word][other_word] += 1
-							else:
-								output[word][other_word] = 1
+				for other_word in words:
+					if other_word != word:
+						if other_word in output[word]:
+							output[word][other_word] += 1
+						else:
+							output[word][other_word] = 1
 	return output
 
 def most_similar_word(word, choices, semantic_descriptors):
@@ -97,6 +90,7 @@ the data in semantic_descriptors.'''
 	most_similar = ""
 	for choice in choices:
 		if word not in semantic_descriptors or choice not in semantic_descriptors:
+			print("word was not in semantic descriptors", word)
 			similarity = -1
 			continue
 		else:
@@ -122,9 +116,11 @@ descriptors stored in semantic_descriptors.'''
 		num_problems = len(lines)
 		for line in lines:
 			response = most_similar_word(line.split()[0], line.split()[2:], semantic_descriptors)
+			print("response:", response)
+			print("correct:", line.split()[1])
 			if response == line.split()[1]:
 				num_correct += 1
-	print("Number of questions:", num_problems, "\nPercent correct:", (num_correct / num_problems * 100))
+	print("\nNumber of questions:", num_problems, "\nNumber of correct responses:", num_correct, "\nPercent correct:", (num_correct / num_problems * 100))
 
 
 def main():
@@ -132,6 +128,6 @@ def main():
 	# print(get_sentence_lists_from_files(["test2.txt"]))
 	# print(build_semantic_descriptors(get_sentence_lists("I am a sick man. I am a spiteful man. I am an unattractive man. I believe my liver is diseased. However, I know nothing at all about my disease, and do not know for certain what ails me.")))
 	# print(most_similar_word("good", ["bad", "nice", "great"], build_semantic_descriptors(get_sentence_lists("good is for bad. good is great. good is definitely great."))))
-	run_similarity_test("test.txt", build_semantic_descriptors(get_sentence_lists_from_files(["swans-way.txt", "war-and-peace.txt"])))
+	run_similarity_test("test.txt", build_semantic_descriptors(get_sentence_lists_from_files(["swans-way.txt", "war-and-peace.txt", "pandoras-box.txt", "castaway.txt", "dictionary.txt"])))
 
 main()
